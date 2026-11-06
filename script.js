@@ -1,34 +1,78 @@
-const sceneCards = document.querySelectorAll(".scene-card");
 
-sceneCards.forEach((card) => {
+// Smooth animation when sections enter the screen
 
-    const button = card.querySelector(".expand-btn");
+const sections = document.querySelectorAll(
+    ".section, .stats-section, .final-section"
+);
 
-    button.addEventListener("click", () => {
+const observer = new IntersectionObserver(
+    (entries) => {
 
-        const isActive = card.classList.contains("active");
+        entries.forEach((entry) => {
 
-        // Close all scenes
-        sceneCards.forEach((otherCard) => {
+            if (entry.isIntersecting) {
 
-            otherCard.classList.remove("active");
+                entry.target.classList.add("visible");
 
-            const otherButton =
-                otherCard.querySelector(".expand-btn");
-
-            otherButton.textContent = "+";
+            }
 
         });
 
-        // Open the selected scene
-        if (!isActive) {
+    },
+    {
+        threshold: 0.1
+    }
+);
 
-            card.classList.add("active");
+sections.forEach((section) => {
+    observer.observe(section);
+});
 
-            button.textContent = "−";
 
+// Highlight navigation link based on scroll position
+
+const navLinks = document.querySelectorAll(".nav-links a");
+
+window.addEventListener("scroll", () => {
+
+    let currentSection = "";
+
+    document.querySelectorAll("section[id]").forEach((section) => {
+
+        const sectionTop =
+            section.offsetTop - 150;
+
+        const sectionHeight =
+            section.offsetHeight;
+
+        if (
+            window.scrollY >= sectionTop &&
+            window.scrollY <
+            sectionTop + sectionHeight
+        ) {
+            currentSection = section.getAttribute("id");
+        }
+
+    });
+
+    navLinks.forEach((link) => {
+
+        link.classList.remove("active");
+
+        if (
+            link.getAttribute("href") ===
+            "#" + currentSection
+        ) {
+            link.classList.add("active");
         }
 
     });
 
 });
+
+
+// Small console message
+
+console.log(
+    "Campus Placement Gone Wrong | PCL Roleplay"
+);
